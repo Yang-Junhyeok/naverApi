@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Naver API 사용한 쇼핑몰 프로젝트</title>
+</head>
+<body>
+  <h1>Naver API 사용한 쇼핑몰 프로젝트</h1>
+  <input type="text" id="query" placeholder="검색어 ㄱㄱ">
+  <button onclick="searchObj()">검색</button>
+  <div id="result">
+
+  </div>
+  <script>
+    function searchObj(){
+
+    //문서에서 아이디가 query인 요소의 값을 찾아서 query변수에 저장
+      const query = document.getElementById("query").value;
+
+      //fetch ~ then ~ catch : 서버랑 통신하는 메서드 , url을 통해서 get방식으로 요청을 진행하고, 요청에 대한 응답이 오면 respinse객체에 응답을 전달함.error가 발생하면 catch다음의 명령어가실행됨.
+      fetch(`/api?query=${query}`)
+        .then(response => response.json())
+        .then(data => {
+          //문서 에서 아이디가 result인 요소를 찾아서 resultDiv변수에 저장
+          const resultDiv = document.getElementById("result");
+
+          //resultDiv 영역 초기화
+          resultDiv.innerHTML = '';
+
+          //응답객체의 데이터 표시하기 위한 반복문
+          data.forEach(item => {
+
+          //문서에 표시할 div요소 생성
+            itemDiv.innerHTML = `
+
+            //새로만들어진 div에 아래 요소추가
+              <h3>${item.title}</h3>
+              <img src="${item.image}" alt="${item.title}">
+              <p>${item.lprice}원</p>
+              <a href="${item.link}">구매하기</a>
+            `;
+            resultDiv.appendChild(itemDiv);
+          })
+        })
+        .catch(error => console.error("데이터 가져오기 실패",error));
+    }
+  </script>
+</body>
+</html>
